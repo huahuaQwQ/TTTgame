@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="" />
+</head>
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .bigbox {
+        width: 306px;
+        height: 300px;
+        background-color: red;
+    }
+
+    .box {
+        width: 100px;
+        height: 100px;
+        border: 1px solid;
+        float: left;
+        background-color: pink;
+        text-align: center;
+        font-family:"Microsoft YaHei",cursive,sans-serif;
+        font-size :70px;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <div class="bigbox">
+        <div class="box1 box" id="0"></div>
+        <div class="box1 box" id="1"></div>
+        <div class="box1 box" id="2"></div>
+        <div class="box2 box" id="3"></div>
+        <div class="box2 box" id="4"></div>
+        <div class="box2 box" id="5"></div>
+        <div class="box3 box" id="6"></div>
+        <div class="box3 box" id="7"></div>
+        <div class="box3 box" id="8"></div>
+    </div>
+</body>
+<script type="text/javascript" charset="utf-8">
+//胜利
+var winway = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,3,6],
+    [1,4,7],
+    [2,5,8],
+    [0,4,8],
+    [2,4,6]
+];
+//存储玩家领地信息
+var playerArray;
+//玩家
+xplayer = 'X';
+oplayer = 'O';
+//回合
+var count = 0;
+//addEventListener第三个参数需使用
+let once = {
+    once : true
+};
+//节点
+var boxs=document.getElementsByClassName('box');
+playgame();
+function playgame(){
+    //创建键值对数组
+    playerArray = Array.from(Array(9).keys());
+    
+    for(var i = 0 ; i<boxs.length ; i++){
+        boxs[i].innerText = '';
+        //click鼠标点击触发，turnclick函数，false冒泡（true为捕获）
+        boxs[i].addEventListener("click",triggerclick,once);
+    }
+};
+function triggerclick(box){
+    // console.log(box.target.id);
+    
+    if(count%2==0){
+        change(box.target.id,xplayer);
+        count++;
+    }else{
+        change(box.target.id,oplayer);
+        count++;
+    }
+    
+};
+function change(boxId,player){
+    // console.log(boxId,player);
+    //把值传进数组里，用索引作为键访问值
+    playerArray[boxId] = player;
+    boxs[boxId].innerText = player;
+    //判断是否胜利
+    let gamewin = checkwin(playerArray,player);
+    if(gamewin){
+        gameover(gamewin);
+    }
+    
+};
+function checkwin(playerArray,player){
+    let gamewin = null;
+    //玩家信息
+    let playinfo = playerArray.reduce((previous, current, index) => 
+        current==player?(previous.concat(index)):previous, []);
+    // console.log(a);
+    for(let [index,value] of winway.entries()){
+        if(value.every((element)=>playinfo.indexOf(element)>-1)){
+            gamewin = {index:index,player:player};
+            break;
+        }
+    }
+    return gamewin;
+};
+function gameover(gamewin){
+    for(let index of winway[gamewin.index]){
+        document.getElementById(index).style.backgroundColor = 
+        (gamewin.player == xplayer ? "yellow" : "red");
+    }
+};
+</script>
+
+</html>

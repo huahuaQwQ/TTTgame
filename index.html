@@ -222,10 +222,7 @@
                  * 如果等于，累加器的值(a)用concat方法合并数组i
                  * 如果不等于,直接输出a，判断下一个
                  */ 
-                ((e === player) ? a.concat(i) : a)
-                // console.log(a)
-                // console.log(e)
-                ,[]);
+                ((e === player) ? a.concat(i) : a),[]);
             let gameWin = null;
             //entries()返回一个键值对的数组，index是key，win是value
             for (let [index,win] of winCombos.entries()) {
