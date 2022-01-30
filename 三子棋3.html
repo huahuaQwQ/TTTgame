@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="" />
+</head>
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .bigbox {
+        width: 306px;
+        height: 300px;
+        background-color: red;
+    }
+
+    .box {
+        width: 100px;
+        height: 100px;
+        border: 1px solid;
+        float: left;
+        background-color: pink;
+        text-align: center;
+        font-family:"Microsoft YaHei",cursive,sans-serif;
+        font-size :70px;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <div class="bigbox">
+        <div class="box1 box" id="0"></div>
+        <div class="box1 box" id="1"></div>
+        <div class="box1 box" id="2"></div>
+        <div class="box2 box" id="3"></div>
+        <div class="box2 box" id="4"></div>
+        <div class="box2 box" id="5"></div>
+        <div class="box3 box" id="6"></div>
+        <div class="box3 box" id="7"></div>
+        <div class="box3 box" id="8"></div>
+    </div>
+</body>
+<script type="text/javascript" charset="utf-8">
+//存储玩家领地信息
+//var playerArray;
+//玩家
+//回合
+var count,playerArray
+//节点
+playgame();
+function playgame(){
+    const boxs = document.getElementsByClassName('box'),
+        change = (boxId,player) => {
+                playerArray[player].push(Number(boxId.id));
+                boxId.innerText = player;
+                let gamewin = checkwin(player);
+                if(gamewin){
+                    gameover(gamewin);
+                }
+            }
+    count = 0
+    playerArray = {
+        'X':[],
+        'O':[]
+    }
+    for(let i = 0 ; i<boxs.length ; i++){
+        boxs[i].innerText = '';
+        boxs[i].addEventListener("click",()=>{
+            change(boxs[i] , count%2 == 0 ? 'X' : 'O')
+            count++;
+        },{once:true});
+    }
+};
+function checkwin(player){
+    let gamewin = null;
+    //玩家信息
+    let playinfo = playerArray[player];
+    // console.log(a);
+    const winway = [[0,1,2],
+                    [3,4,5],
+                    [6,7,8],
+                    [0,3,6],
+                    [1,4,7],
+                    [2,5,8],
+                    [0,4,8],
+                    [2,4,6]
+                ];
+    for (let i = 0;i<winway.length;i++){
+        let temp =  winway[i]
+        if (playinfo.filter(v => temp.includes(v)).length == 3){
+            gamewin = {
+                player,
+                way:temp
+            }
+            return gamewin;
+        }
+    }
+    return gamewin;
+};
+function gameover(gamewin){
+    const color = gamewin.player == 'X' ? "yellow" : "red";
+    gamewin.way.forEach(e=>{
+        document.getElementById(e).style.backgroundColor = color;
+    });
+};
+</script>
+
+</html>
